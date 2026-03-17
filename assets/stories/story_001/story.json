@@ -1,0 +1,51 @@
+{
+  "story_id": "story_001",
+  "scenes": [
+    {
+      "scene_id": "scene_01",
+      "order": 1,
+      "base_image": "/Users/sunahatatatsuya/picturebook_project/input_pages/demo01cover.jpg",
+      "text": "Today, Sara starts her adventure.",
+      "view_type": "front_close",
+      "face_bboxes": [{"cx": 0.70, "cy": 0.41, "rw": 0.065, "rh": 0.22}]
+    },
+    {
+      "scene_id": "scene_02",
+      "order": 2,
+      "base_image": "/Users/sunahatatatsuya/picturebook_project/input_pages/demo03farm_tractor.jpg",
+      "text": "She drives her tractor across the farm.",
+      "view_type": "three_quarter",
+      "face_bboxes": [
+        {"cx": 0.21, "cy": 0.36, "rw": 0.060, "rh": 0.23},
+        {"cx": 0.80, "cy": 0.38, "rw": 0.130, "rh": 0.42}
+      ]
+    },
+    {
+      "scene_id": "scene_03",
+      "order": 3,
+      "base_image": "/Users/sunahatatatsuya/picturebook_project/input_pages/demo02forest.jpg",
+      "text": "Suddenly, she finds a dinosaur in the forest.",
+      "view_type": "side",
+      "face_bboxes": [{"cx": 0.175, "cy": 0.30, "rw": 0.075, "rh": 0.24}]
+    },
+    {
+      "scene_id": "scene_04",
+      "order": 4,
+      "base_image": "/Users/sunahatatatsuya/picturebook_project/input_pages/demo04dinosaur_valley.jpg",
+      "text": "She explores the jungle.",
+      "view_type": "far",
+      "face_bboxes": [{"cx": 0.21, "cy": 0.29, "rw": 0.040, "rh": 0.15}]
+    },
+    {
+      "scene_id": "scene_05",
+      "order": 5,
+      "base_image": "/Users/sunahatatatsuya/picturebook_project/input_pages/demo05ending.jpg",
+      "text": "Finally, Sara returns home to her family.",
+      "view_type": "three_quarter",
+      "face_bboxes": [
+        {"cx": 0.255, "cy": 0.52, "rw": 0.060, "rh": 0.23},
+        {"cx": 0.76,  "cy": 0.50, "rw": 0.055, "rh": 0.20}
+      ]
+    }
+  ]
+}

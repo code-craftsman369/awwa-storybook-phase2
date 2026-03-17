@@ -1,0 +1,125 @@
+import fal_client, requests, base64, os
+import numpy as np
+from PIL import Image, ImageFilter, ImageEnhance
+from io import BytesIO
+from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
+os.environ["FAL_KEY"] = os.getenv("FAL_KEY", "")
+
+OUTPUT_DIR = Path("../outputs")
+
+def to_b64(filepath: str, mime: str) -> str:
+    with open(filepath, "rb") as f:
+        b64 = base64.b64encode(f.read()).decode()
+    return f"data:{mime};base64,{b64}"
+
+def pil_to_b64(img: Image.Image, fmt: str = "PNG") -> str:
+    buf = BytesIO()
+    img.save(buf, format=fmt)
+    b64 = base64.b64encode(buf.getvalue()).decode()
+    mime = "image/png" if fmt == "PNG" else "image/jpeg"
+    return f"data:{mime};base64,{b64}"
+
+def generate_face_illustration(child_photo_path: str, session_id: str) -> Image.Image:
+    """Step 1: 子供写真 → 絵本スタイル顔イラスト（透過PNG）"""
+    print("Step 1a: flux image-to-image...")
+    img_b64 = to_b64(child_photo_path, "image/jpeg")
+    result = fal_client.subscribe(
+        "fal-ai/flux/dev/image-to-image",
+        arguments={
+            "image_url": img_b64,
+            "prompt": (
+                "flat 2D cartoon children's book illustration style, "
+                "cute girl face, round face, big eyes, happy smile, rosy chubby cheeks, "
+                "simple cel shading, bold dark outlines, soft pastel colors, "
+                "storybook character portrait, plain white background, "
+                "head and shoulders only, no realistic texture"
+            ),
+            "strength": 0.95,
+            "num_inference_steps": 28,
+            "guidance_scale": 3.5,
+            "num_images": 1,
+        },
+        with_logs=False,
+    )
+    face_url = result["images"][0]["url"]
+    print(f"Step 1a done: {face_url}")
+    face_img = Image.open(BytesIO(requests.get(face_url).content)).convert("RGB")
+
+    # 確認用に保存
+    face_raw_path = str(OUTPUT_DIR / f"{session_id}_face_raw.jpg")
+    face_img.save(face_raw_path, "JPEG", quality=85)
+    print(f"Face raw saved: {face_raw_path}")
+
+    print("Step 1b: bria background remove...")
+    face_b64 = pil_to_b64(face_img, "PNG")
+    bg_result = fal_client.subscribe(
+        "fal-ai/bria/background/remove",
+        arguments={"image_url": face_b64},
+        with_logs=False,
+    )
+    print(f"Bria result keys: {list(bg_result.keys())}")
+
+    # レスポンス構造を確認して対応
+    if "image" in bg_result:
+        if isinstance(bg_result["image"], dict):
+            bg_url = bg_result["image"]["url"]
+        else:
+            bg_url = bg_result["image"]
+    elif "images" in bg_result:
+        bg_url = bg_result["images"][0]["url"]
+    else:
+        print(f"Unknown bria response: {bg_result}")
+        # 背景除去失敗時はそのまま使う（白背景）
+        return face_img.convert("RGBA")
+
+    print(f"Step 1b done: {bg_url}")
+    face_transparent = Image.open(BytesIO(requests.get(bg_url).content)).convert("RGBA")
+
+    face_path = str(OUTPUT_DIR / f"{session_id}_face_illustration.png")
+    face_transparent.save(face_path, "PNG")
+    print(f"Face illustration saved: {face_path}")
+    return face_transparent
+
+def composite_face(base_img: Image.Image, face_rgba: Image.Image, bbox: dict) -> Image.Image:
+    """Step 2: Pillow合成"""
+    bw, bh = base_img.size
+    cx = int(bw * bbox["cx"])
+    cy = int(bh * bbox["cy"])
+    rw = int(bw * bbox["rw"] * 0.90)
+    rh = int(bh * bbox["rh"] * 0.95)
+
+    face_resized = face_rgba.resize((rw * 2, rh * 2), Image.LANCZOS)
+
+    face_rgb = face_resized.convert("RGB")
+    face_rgb = ImageEnhance.Brightness(face_rgb).enhance(0.98)
+    face_rgb = ImageEnhance.Color(face_rgb).enhance(0.97)
+    alpha = face_resized.getchannel("A").filter(ImageFilter.GaussianBlur(3.5))
+    face_adjusted = Image.merge("RGBA", (*face_rgb.split(), alpha))
+
+    x = cx - rw
+    y = cy - rh
+
+    base_rgba = base_img.convert("RGBA")
+    layer = Image.new("RGBA", base_rgba.size, (0, 0, 0, 0))
+    layer.paste(face_adjusted, (x, y), face_adjusted)
+    result = Image.alpha_composite(base_rgba, layer)
+    return result.convert("RGB")
+
+def generate_scene(base_image_path: str, bboxes: list, child_photo_path: str, session_id: str, scene_id: str) -> str:
+    face_cache_path = str(OUTPUT_DIR / f"{session_id}_face_illustration.png")
+    if not os.path.exists(face_cache_path):
+        face_rgba = generate_face_illustration(child_photo_path, session_id)
+    else:
+        face_rgba = Image.open(face_cache_path).convert("RGBA")
+        print(f"Using cached face: {face_cache_path}")
+
+    base_img = Image.open(base_image_path).convert("RGB")
+    for bbox in bboxes:
+        base_img = composite_face(base_img, face_rgba, bbox)
+
+    out_path = str(OUTPUT_DIR / f"{session_id}_{scene_id}.jpg")
+    # JPEGで保存してサイズ削減
+    base_img.save(out_path, "JPEG", quality=85)
+    return out_path
