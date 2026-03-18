@@ -216,12 +216,12 @@ def _generate_scenes_girl(anime_face_path, char_desc, clean, bg_dir, out_dir):
          f"She is sitting in the driver seat looking forward with a smile. "
          f"Keep the orange cat, forest, dinosaurs, river and everything else exactly the same. "
          f"Match the anime picture book illustration style exactly.",
-         99, str(out_dir / "scene_03.jpg")),
+         42, str(out_dir / "scene_03.jpg")),
 
         ("scene_04", str(clean / "scene_04_clean.jpg"),
          f"Add a cute small anime girl driving the yellow roller machine on the LEFT side. "
          f"The girl has {char_desc}. Wearing a pink top. No hijab. No headscarf. "
-         f"She is sitting in the driver seat with a cheerful smile. Wearing a pink top and skirt. "
+         f"She is sitting in the driver seat with a cheerful smile. "
          f"Match the anime picture book illustration style exactly. Keep everything else the same.",
          42, str(out_dir / "scene_04.jpg")),
     ]
@@ -287,7 +287,7 @@ def _generate_scenes_boy(anime_face_path, char_desc, clean, bg_dir, out_dir):
          f"He is sitting in the driver seat looking forward with a smile, holding a white rabbit toy. "
          f"Keep the orange cat, forest, dinosaurs, river and everything else exactly the same. "
          f"Match the anime picture book illustration style exactly.",
-         99, str(out_dir / "scene_03.jpg")),
+         42, str(out_dir / "scene_03.jpg")),
 
         ("scene_04", str(clean / "scene_04_clean.jpg"),
          f"Add a cute small anime boy driving the yellow roller machine on the LEFT side. "
