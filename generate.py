@@ -221,9 +221,9 @@ def _generate_scenes_girl(anime_face_path, char_desc, clean, bg_dir, out_dir):
         ("scene_04", str(clean / "scene_04_clean.jpg"),
          f"Add a cute small anime girl driving the yellow roller machine on the LEFT side. "
          f"The girl has {char_desc}. Wearing a pink top. No hijab. No headscarf. "
-         f"She is sitting in the driver seat with a cheerful smile. "
+         f"She is sitting in the driver seat with a cheerful smile. Wearing a pink top and skirt. "
          f"Match the anime picture book illustration style exactly. Keep everything else the same.",
-         99, str(out_dir / "scene_04.jpg")),
+         42, str(out_dir / "scene_04.jpg")),
     ]
     _run_parallel(scenes_parallel, anime_face_path)
 
@@ -256,13 +256,13 @@ def _generate_scenes_girl(anime_face_path, char_desc, clean, bg_dir, out_dir):
     t = time.time()
     run_kontext_with_retry(
         s5_step1, anime_face_path,
-        f"Replace the PINK OVAL shape in the center back seat with a cute small anime BOY. "
-        f"The boy has {char_desc}. Wearing a BLUE top. Short masculine hair. No headscarf. No hijab. "
-        f"He is sitting between the father and mother, smiling happily. "
-        f"The pink oval must be completely replaced by the boy's face and body. "
-        f"Do NOT change the bearded father on the left. Do NOT change the blonde mother with glasses on the right. "
+        f"Replace the PINK OVAL shape in the center back seat with a cute small anime GIRL. "
+        f"The girl has {char_desc}. Wearing a PINK top. Long hair. No glasses. No headscarf. No hijab. "
+        f"She is sitting between the father and mother, smiling happily. "
+        f"The pink oval must be completely replaced by the girl's face and body. "
+        f"Do NOT change the bearded father on the left. Do NOT change the mother on the right. "
         f"Match the anime picture book illustration style exactly.",
-        42, str(out_dir / "scene_05.jpg"))
+        15, str(out_dir / "scene_05.jpg"))
     print(f"  ✅ scene_05 ({time.time()-t:.1f}秒)")
 
 def _generate_scenes_boy(anime_face_path, char_desc, clean, bg_dir, out_dir):
