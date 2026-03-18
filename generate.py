@@ -17,11 +17,11 @@ def _load_env():
 _load_env()
 
 BASE_DIR = Path(__file__).parent
-OUTPUT_DIR = BASE_DIR / "../outputs/generated"
+OUTPUT_DIR = BASE_DIR / "outputs/generated"
 
 CLEAN_BASE_CONFIG = {
     "girl": {
-        "dir": BASE_DIR / "../outputs/clean_base/girl",
+        "dir": BASE_DIR / "outputs/clean_base/girl",
         "scenes": {
             "scene_01": [{"cx": 0.715, "cy": 0.385, "rw": 0.060, "rh": 0.14, "fill": (200, 190, 170)}],
             "scene_02": [{"pixel": [943, 603, 1227, 1073], "fill": (178, 166, 136)}],
@@ -34,7 +34,7 @@ CLEAN_BASE_CONFIG = {
         "bg_dir": BASE_DIR / "assets/backgrounds/girl",
     },
     "boy": {
-        "dir": BASE_DIR / "../outputs/clean_base/boy",
+        "dir": BASE_DIR / "outputs/clean_base/boy",
         "scenes": {
             "scene_01": [{"cx": 0.195, "cy": 0.385, "rw": 0.052, "rh": 0.125, "fill": (180, 195, 210)}],
             "scene_02": [{"cx": 0.205, "cy": 0.345, "rw": 0.040, "rh": 0.115, "fill": (195, 185, 165)}],
