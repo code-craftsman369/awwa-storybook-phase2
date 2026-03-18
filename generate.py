@@ -246,7 +246,7 @@ def _generate_scenes_girl(anime_face_path, char_desc, clean, bg_dir, out_dir):
         str(clean / "scene_05_clean.jpg"), anime_face_path,
         f"Add a cute small anime girl standing near the barn on the LEFT side. "
         f"The girl has {char_desc}. Wearing a pink long dress. No hijab. No headscarf. "
-        f"She is standing holding something small, looking cheerful. "
+        f"She is standing holding something small, looking toward the RIGHT with a cheerful smile. "
         f"Keep the father, mother with purple hijab, blue car, barn, chicken and ALL other elements exactly the same. "
         f"Match the anime picture book illustration style exactly.",
         42, s5_step1)
