@@ -329,12 +329,10 @@ def _generate_scenes_boy(anime_face_path, char_desc, clean, bg_dir, out_dir):
     t = time.time()
     run_kontext_with_retry(
         s5_step1, anime_face_path,
-        f"Replace the PINK OVAL shape in the center back seat with a cute small anime BOY. "
-        f"The boy has {char_desc}. Wearing a BLUE top. Short masculine hair. No headscarf. No hijab. "
-        f"He is sitting between the father and mother, smiling happily. "
-        f"The pink oval must be completely replaced by the boy's face and body. "
-        f"Do NOT change the bearded father on the left. Do NOT change the blonde mother with glasses on the right. "
-        f"Match the anime picture book illustration style exactly.",
+        f"Replace the PINK OVAL shape with a cute small anime boy's face and upper body. "
+        f"The boy has {char_desc}. Wearing a BLUE top. "
+        f"Keep EVERYTHING else completely unchanged - the father, the mother, the car interior, the background. "
+        f"Only the pink oval area should change. Nothing else.",
         42, str(out_dir / "scene_05.jpg"))
     print(f"  ✅ scene_05 ({time.time()-t:.1f}秒)")
 
