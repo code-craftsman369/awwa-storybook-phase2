@@ -22,3 +22,5 @@ Contact: Available via GitHub
 - GitHub: [@code-craftsman369](https://github.com/code-craftsman369)
 - Email: freelance.tatsu.2025@gmail.com
 - Demo: https://awwa-storybook-phase2-code-craftsman369.streamlit.app
+
+If you are from Awwa Stories, please feel free to contact me directly via email as I am currently unable to access Upwork.
